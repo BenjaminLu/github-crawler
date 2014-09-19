@@ -1,5 +1,15 @@
 <?php
+
+if (!file_exists('urls')) {
+    mkdir('urls', 0755, true);
+}
+
+if (!file_exists('resource')) {
+    mkdir('resource', 0755, true);
+}
+
 fetchPopularRepositories(3000);
+
 $filepath = "urls/out.txt";
 readFileAndFetchEachRepo($filepath, "repo_","_src");
 
