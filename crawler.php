@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-for ($i=1; $i <= 100; $i++) { 
+for ($i = 60; $i <= 100; $i++) { 
 	$url = "https://github.com/search";
 	$params = array(
 	  "q"   	=>	"stars:>3000",
@@ -13,7 +13,38 @@ for ($i=1; $i <= 100; $i++) {
 	$url .= '?' . http_build_query($params);
 
 	$header = get_web_page($url);
-	echo $header['content'] . "\n" . "Page" . $i;
+
+	if(isset($header['errno'])) {
+		echo "Error :" . $header['errno'] . "\r\n";
+	}
+	//echo $header['content'] . "\n" . "Page" . $i;
+	preg_match_all("/<h3 class=\"repo-list-name\">\s*<a href=\"\/(.*)\">(.*)<\/a>/U", $header['content'], $output);
+	
+	$matches = $output[0];
+	for ($j=0; $j < count($matches); $j++) { 
+		if(!isset($matches[$j])) {
+			exit(0);
+		}
+		$pureURL = getPureURL($matches[$j]);
+		$aURL = "https://github.com". $pureURL . "\r\n";
+		echo $aURL;
+		$outFile = "out.txt";
+		$fh = fopen($outFile, 'a+'); 
+		fwrite($fh,$aURL);
+    	fclose($fh);
+
+	}
+
+	sleep(30);
+
+}
+
+function getPureURL($htmlSnippet)
+{
+	$htmlSnippet = strstr($htmlSnippet, 'href="');
+	$htmlSnippet = strstr($htmlSnippet, '">', true);
+	$htmlSnippet = strstr($htmlSnippet, '/');
+	return $htmlSnippet;
 }
 
 function get_web_page( $url )
