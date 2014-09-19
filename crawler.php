@@ -49,7 +49,7 @@ function fetchPopularRepositories($starNumber)
 	for ($i = 1; $i <= 61; $i++) { 
 		$url = "https://github.com/search";
 		$params = array(
-		  "q"   	=>	"stars:>" + $starNumber,
+		  "q"   	=>	"stars:>" . $starNumber,
 		  "utf8"	=>	"%E2%9C%93",
 		  "type"	=>	"Repositories",
 		  "ref" 	=>	"searchresults",
