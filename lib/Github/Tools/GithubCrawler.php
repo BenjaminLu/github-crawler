@@ -1,6 +1,5 @@
 <?php
-
-
+namespace Github\Tools;
 class GithubCrawler
 {
     private $urlsDir = "urls";
@@ -26,7 +25,10 @@ class GithubCrawler
     
     public function crawEachRepoHtml()
     {
-        $this->readFileAndFetchEachRepo($this->urlsDir . $this->outputFilePath, "repo_", "_src");
+        $dirName  = $this->urlsDir;
+        $outputFile  = $this->outputFilePath;
+        $filename = $dirName."/".$outputFile;
+        $this->readFileAndFetchEachRepo($filename, "repo_", "_src");
     }
     
     private function readFileAndFetchEachRepo($filename = '', $filePrefix, $fileSuffix)
@@ -137,7 +139,3 @@ class GithubCrawler
     }
     
 }
-
-$crawler = new GithubCrawler("out.txt");
-$crawler->crawlPopularRepoWithStar(3000);
-$crawler->crawEachRepoHtml();
