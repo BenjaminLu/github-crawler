@@ -23,7 +23,7 @@ class GithubCrawler
         $this->fetchPopularRepositories($starNumber);
     }
     
-    public function crawEachRepoHtml()
+    public function crawlEachRepoHtml()
     {
         $dirName  = $this->urlsDir;
         $outputFile  = $this->outputFilePath;
