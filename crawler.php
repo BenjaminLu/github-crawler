@@ -45,7 +45,8 @@ function readFileAndFetchEachRepo($filename = '', $filePrefix, $fileSuffix)
 
 function fetchPopularRepositories($starNumber) 
 {
-	for ($i = 60; $i <= 100; $i++) { 
+	echo "Fetching All Repositories which have over ".$starNumber." stars\r\n";
+	for ($i = 1; $i <= 61; $i++) { 
 		$url = "https://github.com/search";
 		$params = array(
 		  "q"   	=>	"stars:>" + $starNumber,
@@ -57,22 +58,11 @@ function fetchPopularRepositories($starNumber)
 
 		$url .= '?' . http_build_query($params);
 
-		echo "Fetching All Repositories which have over ".$starNumber." stars\r\n";
 		$header = get_web_page($url);
-
-		if(isset($header['errno'])) {
-			echo "Error :" . $header['errno'] . "\r\n";
-		}
-		//echo $header['content'] . "\n" . "Page" . $i;
 		preg_match_all("/<h3 class=\"repo-list-name\">\s*<a href=\"\/(.*)\">(.*)<\/a>/U", $header['content'], $output);
 		
 		$matches = $output[0];
 		for ($j=0; $j < count($matches); $j++) { 
-
-			if(!isset($matches[$j])) {
-				exit(0);
-			}
-
 			$pureURL = getPureURL($matches[$j]);
 			$aURL = "https://github.com". $pureURL . "\r\n";
 			echo $aURL;
@@ -80,7 +70,6 @@ function fetchPopularRepositories($starNumber)
 			$fh = fopen($outFile, 'a+'); 
 			fwrite($fh,$aURL);
 			fclose($fh);
-
 		}
 
 		sleep(30);
