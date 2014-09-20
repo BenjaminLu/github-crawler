@@ -127,40 +127,40 @@ class GithubCrawler
         $htmlContent = $html['content'];
 
         $fh = fopen("data/".$this->interestValueStorePath, 'a+');
-        fwrite($fh, $aURL . "\r\n");
+        fwrite($fh, $aURL . ", ");
         fclose($fh);
 
         //#Stars
         $matches = $this->findInterestValueByRegex('/js-social-count" href="(.*)">\s*[0-9]*,?[0-9]+\s*<\/a>/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Stars :", ", ", "number");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "number");
 
         //#Fork
         $matches = $this->findInterestValueByRegex('/class="social-count">\s*[0-9]*,?[0-9]+\s*<\/a>/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Fork :", ", ", "number");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "number");
 
         //#Commit
         $matches = $this->findInterestValueByRegex('/num text-emphasized">\s*[0-9]*,?[0-9]+\s*<\/span>\s*commits/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Commit :", ", ", "number");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "number");
 
         //#Branch
         $matches = $this->findInterestValueByRegex('/octicon-git-branch">\s*<\/span>\s*<span class="num text-emphasized">\s*[0-9]*,?[0-9]+\s*<\/span>/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Branch :", ", ", "number");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "number");
 
         //#Release
         $matches = $this->findInterestValueByRegex('/num text-emphasized">\s*[0-9]*,?[0-9]+\s*<\/span>\s*releases/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Release :", ", ", "number");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "number");
 
         //#Contributors
         $matches = $this->findInterestValueByRegex('/num text-emphasized">\s*[0-9]*,?[0-9]+\s*<\/span>\s*contributors/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Contributors :", ", ", "number");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "number");
 
         //#Langs
         $matches = $this->findInterestValueByRegex('/<span class="lang">(.*)<\/span>/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Langs :", ", ", "lang");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "lang");
 
         //#Percent
         $matches = $this->findInterestValueByRegex('/<span class="percent">(.*)<\/span>/um', $htmlContent);
-        $this->echoAndSaveInterestValue($matches, "#Percent :", ", ", "lang");
+        $this->echoAndSaveInterestValue($matches, "", ", ", "lang");
 
         $this->repoDetailSaveEnd();
 
@@ -198,7 +198,7 @@ class GithubCrawler
             }
 
             echo $matchCasePrefix . $matches[$j] . $matchCaseSuffix;
-            $fh  = fopen("data/data.txt", 'a+');
+            $fh  = fopen("data/".$this->interestValueStorePath, 'a+');
             fwrite($fh, $matchCasePrefix . $matches[$j] . $matchCaseSuffix);
             fclose($fh);
         }
