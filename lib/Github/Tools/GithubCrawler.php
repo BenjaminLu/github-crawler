@@ -76,6 +76,13 @@ class GithubCrawler
     private function fetchPopularRepositories($starNumber, $doAnalyzing)
     {
         echo "Fetching All Repositories which have over " . $starNumber . " stars\r\n";
+
+        $waitSecond = 30;
+
+        if($doAnalyzing) {
+            $waitSecond = 15;
+        }
+
         for ($i = 1; $i <= 61; $i++) {
             $url    = "https://github.com/search";
             $params = array(
@@ -108,7 +115,7 @@ class GithubCrawler
 
             }
             
-            sleep(30);
+            sleep($waitSecond);
         }
     }
 

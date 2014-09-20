@@ -2,7 +2,6 @@
 include "autoload.php";
 use \Github\Tools\GithubCrawler;
 
-
 //get crawler and set urls output filename under "urls" directory
 $crawler = new GithubCrawler("out.txt");
 
