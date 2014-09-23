@@ -53,7 +53,7 @@ class GithubCrawler
             $targetURL = fgets($file);
             $targetURL = str_replace("\r\n", '', $targetURL);
             
-            if ($targetURL == "\r\n" || $targetURL == "\n" || $targetURL == "" || $targetURL == null) {
+            if ($targetURL == "\r\n" or $targetURL == "\n" or $targetURL == "" or $targetURL == null) {
                 echo "Job finished";
                 exit(1);
             }
