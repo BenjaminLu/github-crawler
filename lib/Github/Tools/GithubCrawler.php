@@ -5,6 +5,7 @@ class GithubCrawler
     private $urlsDir = "urls";
     private $dataDir = "data";
     private $resDir = "resource";
+    private $readmeDir = "readme";
     private $urlsFilePath;
     private $interestValueStorePath;
     public function __construct($urlsFilePath)
@@ -26,6 +27,10 @@ class GithubCrawler
             mkdir($this->dataDir, 0755, true);
         }
         
+        if (!file_exists($this->readmeDir)) {
+            mkdir($this->readmeDir, 0755, true);
+        }
+
         if ($doAnalyzing) {
             $this->interestValueStorePath = $interestValueStorePath;
         }
@@ -78,7 +83,8 @@ class GithubCrawler
         echo "Fetching All Repositories which have over " . $starNumber . " stars\r\n";
         
         $waitSecond = 30;
-        
+        $count=0;
+
         if ($doAnalyzing) {
             $waitSecond = 15;
         }
@@ -101,9 +107,23 @@ class GithubCrawler
             $matches = $output[0];
             for ($j = 0; $j < count($matches); $j++) {
                 $pureURL = $this->getPureURL($matches[$j]);
-                $aURL    = "https://github.com" . $pureURL . "\r\n";
-                echo $aURL;
-                $outFile = $this->urlsDir . "/" . $this->urlsFilePath;
+                $aURL    = "https://github.com" . $pureURL . "\r\n";    //each repo. url
+                //echo $aURL;
+
+                //get readme
+                //https://raw.githubusercontent.com/__userName__/__repoName__/master/README.md
+                $readmeURL    = "https://raw.githubusercontent.com" . $pureURL ."/master/README.md";
+                echo $readmeURL . "... \n";
+                echo $this->count . "\n";
+                
+                $htmlInfo = $this->get_web_page( $readmeURL );
+                $outFile = $this->readmeDir . "/" . $this->count ."_README.md";
+                $fh      = fopen($outFile, 'a+');
+                fwrite($fh, $htmlInfo['content']);
+                fclose($fh);
+                $this->count++;
+
+                /*$outFile = $this->urlsDir . "/" . $this->urlsFilePath;
                 $fh      = fopen($outFile, 'a+');
                 fwrite($fh, $aURL);
                 fclose($fh);
@@ -111,12 +131,12 @@ class GithubCrawler
                 if ($doAnalyzing) {
                     $aURL = str_replace("\r\n", '', $aURL);
                     $this->analyzeRepoDetail($aURL);
-                }
-                
+                }*/
             }
             
             sleep($waitSecond);
         }
+
     }
     
     public function analyzeRepoDetail($aURL)
@@ -164,7 +184,7 @@ class GithubCrawler
         $this->repoDetailSaveEnd();
         
     }
-    
+
     private function repoDetailSaveEnd()
     {
         $fh = fopen("data/" . $this->interestValueStorePath, 'a+');
